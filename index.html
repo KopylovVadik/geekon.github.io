@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;700&family=Open+Sans:wght@300;400;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="dist/style.css">
+  <title>Geekon - главная</title>
+  <link rel="icon" href="img/logo-geekon-title.png">
+</head>
+
+<body>
+
+<div class="all-page">
+  <header>
+    <div class="container">
+      <div class="contact-href">
+        <a href="tel:25-29-52"><img src="img/phone-call.png" width="15px" height="15px" alt=""> 25-29-52</a>
+        <a href="https://vk.com/geekon" target="_blanck"><img src="img/vk-social.png" alt="" width="20px"
+            height="20px"></a>
+      </div>
+
+      <div class="header-block">
+        <div class="logo-block">
+          <div class="logo-block-img">
+            <a href="index.html">
+            <img src="img/logo-geekon.jpg" alt="" width="64px" height="64px">
+          </a>
+          </div>
+          <div class="logo-block-text">
+            <a href="index.html">GEEKON</a><br>
+            <span>Магазин электронных компонентов</span>
+          </div>
+        </div>
+        <div class="navigation-block">
+          <nav class="navigation">
+            <ul>
+              <li><a href="index.html">Главная</a></li>
+              <li><a href="catalog.html">Каталог</a></li>
+              <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+          </nav>
+          <div class="hamburger-menu">
+            <input id="menu__toggle" type="checkbox" />
+            <label class="menu__btn" for="menu__toggle">
+              <span></span>
+            </label>
+        
+            <ul class="menu__box">
+              <li><a href="index.html">Главная</a></li>
+              <li><a href="catalog.html">Каталог</a></li>
+              <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+  <!-- 
+    <img src="img/slider-2.png" alt="Первый слайд">
+              <div class="slideText">Платы Arduino и другие модули<br>
+              <a href="">Купить</a></div>
+               -->
+    <div class="main-block">
+      <div class="container">
+
+        <div class="slider">
+          <div class="slider__wrapper">
+
+            <div class="slider__item">
+              <div style="height: 90%">
+                <img class="slider-img" src="img/slider-2.png"  alt="Первый слайд">
+              <div class="slideText-1">Платы Arduino и другие модули<br>
+              <a href="">Купить</a></div>
+              </div>
+            </div>
+
+            <div class="slider__item">
+              <div style="height: 90%">
+                <img class="slider-img-2" src="img/slider-1.jpg" alt="Второй слайд">
+              <div class="slideText-2">Микрокомпьютер Raspberry Pi 3<br>
+                Маленький размер - большая мощность!<br>
+              <a class="slideHref" href="www.google.com">Смотреть</a></div>
+              </div>
+            </div>
+                        
+          </div>
+          <a class="slider__control slider__control_left" href="#" role="button"></a>
+          <a class="slider__control slider__control_right slider__control_show" href="#" role="button"></a>
+        </div>
+        
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-block">
+      <span>© GEEKON, 2018</span>
+    </div>
+  </footer>
+</div>
+  <script>
+  'use strict';
+    var multiItemSlider = (function () {
+      return function (selector, config) {
+        var
+          _mainElement = document.querySelector(selector), // основный элемент блока
+          _sliderWrapper = _mainElement.querySelector('.slider__wrapper'), // обертка для .slider-item
+          _sliderItems = _mainElement.querySelectorAll('.slider__item'), // элементы (.slider-item)
+          _sliderControls = _mainElement.querySelectorAll('.slider__control'), // элементы управления
+          _sliderControlLeft = _mainElement.querySelector('.slider__control_left'), // кнопка "LEFT"
+          _sliderControlRight = _mainElement.querySelector('.slider__control_right'), // кнопка "RIGHT"
+          _wrapperWidth = parseFloat(getComputedStyle(_sliderWrapper).width), // ширина обёртки
+          _itemWidth = parseFloat(getComputedStyle(_sliderItems[0]).width), // ширина одного элемента    
+          _positionLeftItem = 0, // позиция левого активного элемента
+          _transform = 0, // значение транфсофрмации .slider_wrapper
+          _step = _itemWidth / _wrapperWidth * 100, // величина шага (для трансформации)
+          _items = [], // массив элементов
+          _interval = 0,
+          _config = {
+            isCycling: false, // автоматическая смена слайдов
+            direction: 'right', // направление смены слайдов
+            interval: 2000, // интервал между автоматической сменой слайдов
+            pause: true // устанавливать ли паузу при поднесении курсора к слайдеру
+          };
+
+        for (var key in config) {
+          if (key in _config) {
+            _config[key] = config[key];
+          }
+        }
+
+        // наполнение массива _items
+        _sliderItems.forEach(function (item, index) {
+          _items.push({ item: item, position: index, transform: 0 });
+        });
+
+        var position = {
+          getItemMin: function () {
+            var indexItem = 0;
+            _items.forEach(function (item, index) {
+              if (item.position < _items[indexItem].position) {
+                indexItem = index;
+              }
+            });
+            return indexItem;
+          },
+          getItemMax: function () {
+            var indexItem = 0;
+            _items.forEach(function (item, index) {
+              if (item.position > _items[indexItem].position) {
+                indexItem = index;
+              }
+            });
+            return indexItem;
+          },
+          getMin: function () {
+            return _items[position.getItemMin()].position;
+          },
+          getMax: function () {
+            return _items[position.getItemMax()].position;
+          }
+        }
+
+        var _transformItem = function (direction) {
+          var nextItem;
+          if (direction === 'right') {
+            _positionLeftItem++;
+            if ((_positionLeftItem + _wrapperWidth / _itemWidth - 1) > position.getMax()) {
+              nextItem = position.getItemMin();
+              _items[nextItem].position = position.getMax() + 1;
+              _items[nextItem].transform += _items.length * 100;
+              _items[nextItem].item.style.transform = 'translateX(' + _items[nextItem].transform + '%)';
+            }
+            _transform -= _step;
+          }
+          if (direction === 'left') {
+            _positionLeftItem--;
+            if (_positionLeftItem < position.getMin()) {
+              nextItem = position.getItemMax();
+              _items[nextItem].position = position.getMin() - 1;
+              _items[nextItem].transform -= _items.length * 100;
+              _items[nextItem].item.style.transform = 'translateX(' + _items[nextItem].transform + '%)';
+            }
+            _transform += _step;
+          }
+          _sliderWrapper.style.transform = 'translateX(' + _transform + '%)';
+        }
+
+        var _cycle = function (direction) {
+          if (!_config.isCycling) {
+            return;
+          }
+          _interval = setInterval(function () {
+            _transformItem(direction);
+          }, _config.interval);
+        }
+
+        // обработчик события click для кнопок "назад" и "вперед"
+        var _controlClick = function (e) {
+          if (e.target.classList.contains('slider__control')) {
+            e.preventDefault();
+            var direction = e.target.classList.contains('slider__control_right') ? 'right' : 'left';
+            _transformItem(direction);
+            clearInterval(_interval);
+            _cycle(_config.direction);
+          }
+        };
+
+        var _setUpListeners = function () {
+          // добавление к кнопкам "назад" и "вперед" обрботчика _controlClick для событя click
+          _sliderControls.forEach(function (item) {
+            item.addEventListener('click', _controlClick);
+          });
+          if (_config.pause && _config.isCycling) {
+            _mainElement.addEventListener('mouseenter', function () {
+              clearInterval(_interval);
+            });
+            _mainElement.addEventListener('mouseleave', function () {
+              clearInterval(_interval);
+              _cycle(_config.direction);
+            });
+          }
+        }
+
+        // инициализация
+        _setUpListeners();
+        _cycle(_config.direction);
+
+        return {
+          right: function () { // метод right
+            _transformItem('right');
+          },
+          left: function () { // метод left
+            _transformItem('left');
+          },
+          stop: function () { // метод stop
+            _config.isCycling = false;
+            clearInterval(_interval);
+          },
+          cycle: function () { // метод cycle 
+            _config.isCycling = true;
+            clearInterval(_interval);
+            _cycle();
+          }
+        }
+
+      }
+    }());
+
+    var slider = multiItemSlider('.slider', {
+      isCycling: true
+    })
+  </script>
+
+</body>
+
+</html>
